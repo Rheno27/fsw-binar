@@ -1,84 +1,66 @@
-// import students.json
-
-import students from '../data/students.json' with { type: "json"};
-// console.log(students);
-
 const studentContent = document.getElementById("student-content");
-
-let studentContentHTML = ""
-students.map(student => {
-    const studentContent = `
-    <div class="col-md-3">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">${student.name}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                    ${student.education.bachelor}
-                </h6>
-                <p class="card-text">
-                    Nama saya ${student.name}, biasa dipanggil ${student.nickname},
-                    saya berasal dari ${student.address.city}, ${student.address.province}.
-                    dan saya mahasiswa dari ${student.education.bachelor}.
-                </p>
-            </div>
-        </div>
-    </div>
-    `; 
-    studentContentHTML += studentContent;
-    console.log(studentContentHTML);
-});
-studentContent.innerHTML = "<h1>Loading...</h1>";
-
-setTimeout(() => {
-    studentContent.innerHTML = studentContentHTML;
-}, 2000);
-
-//end show all students
-
-
-// start to search
-
 const search = document.getElementById("search");
+const searchForm = document.getElementById("search-form");
 
 search.addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase();
-    console.log(e.target.value);
-    const filteredStudents = students.filter(student => 
-        student.name.toLowerCase().includes(query) || 
-        student.education.bachelor.toLowerCase().includes(query)
-    );
-
-    let filteredContentHTML = "";
-    filteredStudents.map(student => {
-        const studentContent = `
-        <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">${student.name}</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">
-                        ${student.education.bachelor}
-                    </h6>
-                    <p class="card-text">
-                        Nama saya ${student.name}, biasa dipanggil ${student.nickname},
-                        saya berasal dari ${student.address.city}, ${student.address.province}.
-                        dan saya mahasiswa dari ${student.education.bachelor}.
-                    </p>
-                </div>
-            </div>
-        </div>
-        `; 
-        filteredContentHTML += studentContent;
-    });
-
-    studentContent.innerHTML = "<h1>Loading...</h1>";
-
-    setTimeout(() => {
-        if (filteredContentHTML === ""){
-            studentContent.innerHTML = "<h1>Data Tidak Ditemukan</h1>";
-        } else {
-            studentContent.innerHTML = filteredContentHTML;
-        }
-    },1000);
+    // If the search is change, the function will be running
+    const searchValue = e.target.value.toLowerCase();
+    searchStudentContent(searchValue);
 });
 
-// end search
+searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+});
+
+// Normal function
+async function searchStudentContent(search) {
+    studentContent.innerHTML = "<h1>Loading...</h1>";
+
+    const data = await getStudentData(search);
+    if (data.length === 0) {
+        studentContent.innerHTML = `<h1>Searching ${search} not found!</h1>`;
+        return;
+    }
+
+    // Frontend
+    let studentContentHTML = "";
+    data.map((student) => {
+        // variable that will be show in student-content id
+        const studentContent = `
+            <div class="col-md-3">
+                <div class="card" style="width: 18rem">
+                    <div class="card-body">
+                        <h5 class="card-title">${student.name}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">
+                            ${student.education.bachelor}
+                        </h6>
+                        <p class="card-text">
+                            My name is ${student.name}, used to called ${student.nickName}. I am from ${student.address.city}, ${student.address.province}. And I am student of ${student.education.bachelor}.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+        studentContentHTML += studentContent;
+    });
+    studentContent.innerHTML = studentContentHTML;
+}
+
+// Arrow function, this function is to get students.json data that can be rendered to html file
+const getStudentData = async (search) => {
+    const response = await fetch("./data/students.json");
+    const data = await response.json();
+
+    // search student by input (Backend)
+    const filteredData = data.filter((student) => {
+        return (
+            student.name.toLowerCase().includes(search) ||
+            student.education.bachelor.toLowerCase().includes(search)
+        );
+    });
+
+    return filteredData;
+};
+
+/* Show all student data */
+searchStudentContent("");

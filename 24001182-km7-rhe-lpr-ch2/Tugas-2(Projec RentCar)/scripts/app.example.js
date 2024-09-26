@@ -46,11 +46,12 @@ class App {
       const carDate = new Date(car.availableAt);
       const searchDate = new Date(`${date}T${time}`);
       
-      const driverMatch = driver === "1" ? true : car.available;
+      // Ubah logika perbandingan driver di sini
+      const driverMatch = (driver === "1" && car.available === true) || (driver === "2" && car.available === false);
       const dateMatch = carDate >= searchDate;
       const capacityMatch = capacity === "" || (car.capacity && car.capacity >= parseInt(capacity));
 
-      console.log(`Car ${car.id} - Capacity: ${car.capacity}, Match: ${capacityMatch}`);
+      console.log(`Car ${car.id} - Capacity: ${car.capacity}, Available: ${car.available}, Match: ${driverMatch}`);
 
       return driverMatch && dateMatch && capacityMatch;
     });

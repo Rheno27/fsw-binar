@@ -14,6 +14,4 @@ console.log(params);
  * */
 const app = new App();
 
-app.init().then(() => {
-    console.log("App initialized and car data loaded.");
-});
+app.init().then();

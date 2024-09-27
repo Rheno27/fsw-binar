@@ -2,7 +2,8 @@ class Binar {
   static populateCars = (cars) => {
     return cars.map((car) => {
       const timeAt = new Date();
-      const oneWeekLater = new Date(timeAt.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const oneWeekLater = new Date(timeAt.getTime() + 7 * 24 * 60 * 60 * 1000); // Ketersediaan nya hanya untuk hari
+      // Menggunakan Math.random() untuk menghasilkan waktu acak yang unik untuk setiap mobil
       const availableAt = new Date(timeAt.getTime() + Math.random() * (oneWeekLater.getTime() - timeAt.getTime()));
 
       return {

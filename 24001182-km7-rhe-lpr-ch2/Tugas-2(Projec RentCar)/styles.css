@@ -15,10 +15,10 @@ body {
     font-size: 1.25rem;
 }
 .search-section {
-    background-color: #ffffff;
-    padding: 20px;
+    background-color: white;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 24px;
 }
 
 .offcanvas-half {
@@ -135,7 +135,7 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #28a745; /* Warna hijau */
+    background-color: #28a745; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -148,7 +148,7 @@ body {
 }
 
 .carousel-indicators button {
-    background-color: #28a745; /* Warna hijau */
+    background-color: #28a745; 
     border: none;
     width: 12px;
     height: 12px;
@@ -156,7 +156,7 @@ body {
 }
 
 .carousel-indicators .active {
-    background-color: #28a745; /* Warna hijau */
+    background-color: #28a745; 
 }
 
 .carousel-controls {
@@ -170,7 +170,7 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #28a745; /* Warna hijau */
+    background-color: #28a745; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -210,4 +210,39 @@ body {
     width: 15px; /* Sesuaikan ukuran ikon */
     height: 15px;
     filter: invert(1); /* Ubah warna ikon agar terlihat jelas */
+}
+
+.search-section-container {
+    position: relative;
+    z-index: 1000;
+    margin-top: -100px; /* Adjust this value to control how much the section overlaps */
+}
+
+/* Adjust the margin of the section below the search to prevent content overlap */
+#cars-container {
+    margin-top: 70px; /* Adjust this value as needed */
+}
+
+.input-group-text {
+    background-color: #ffffff; /* Warna latar belakang yang lebih terang */
+    border-left: none; /* Menghilangkan border kanan pada ikon */
+}
+
+.input-group .form-control {
+    border-right: none; /* Menghilangkan border kiri pada input */
+}
+
+.input-group .form-control:focus {
+    box-shadow: none; /* Menghilangkan bayangan saat focus */
+    border-color: #ced4da; /* Warna border default Bootstrap */
+}
+
+.input-group .form-control:focus + .input-group-text {
+    border-color: #ced4da; /* Menyamakan warna border ikon saat input di-focus */
+}
+
+.text-danger {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
 }

@@ -72,10 +72,10 @@
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <form class="row g-3">
-                        <div class="col-md-10">
+                        <div class="col-lg-10">
                             <div class="row g-3">
-                                <div class="col-md-3">
-                                    <label for="tipe-driver">Tipe Driver</label>
+                                <div class="col-sm-6 col-md-3">
+                                    <label for="tipe-driver" class="form-label">Tipe Driver</label>
                                     <select id="tipe-driver" class="form-select" aria-label="Tipe Driver" name="driver">
                                         <option value="" disabled selected>Pilih Tipe Driver</option>
                                         <option value="1">Dengan Sopir</option>
@@ -83,18 +83,18 @@
                                     </select>
                                     <div id="tipe-driver-error" class="text-danger"></div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="tanggal">Tanggal</label>
+                                <div class="col-sm-6 col-md-3">
+                                    <label for="tanggal" class="form-label">Tanggal</label>
                                     <input type="date" class="form-control" id="tanggal" name="tanggal">
                                     <div id="tanggal-error" class="text-danger"></div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="waktu">Waktu Jemput/Ambil</label>
+                                <div class="col-sm-6 col-md-3">
+                                    <label for="waktu" class="form-label">Waktu Jemput/Ambil</label>
                                     <input type="time" class="form-control" id="waktu" name="waktu">
                                     <div id="waktu-error" class="text-danger"></div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="jumlah-penumpang">Jumlah Penumpang (optional)</label>
+                                <div class="col-sm-6 col-md-3">
+                                    <label for="jumlah-penumpang" class="form-label">Penumpang (optional)</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" id="jumlah-penumpang" name="jumlah-penumpang" min="1" placeholder="Jumlah Penumpang">
                                         <span class="input-group-text">
@@ -106,7 +106,7 @@
                                 
                             </div>
                         </div>
-                        <div class="col-md-2 d-flex align-items-end">
+                        <div class="col-lg-2 d-flex align-items-end">
                             <button id="cari" type="submit" class="btn btn-success w-100">Cari Mobil</button>
                         </div>
                     </form>

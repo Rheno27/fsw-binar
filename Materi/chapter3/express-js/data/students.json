@@ -1,0 +1,67 @@
+[
+    {
+        "id": 1,
+        "name": "rheno julius",
+        "nickname": "rheno",
+        "class": "FSW-1",
+        "address": {
+            "province": "jawa timur",
+            "city": "jember"
+        },
+        "education": {
+            "bachelor": "universitas jember"
+        }
+    },
+    {
+        "id": 2,
+        "name": "eko indra",
+        "nickname": "eko",
+        "class": "FSW-1",
+        "address": {
+            "province": "jawa timur",
+            "city": "surabaya"
+        },
+        "education": {
+            "bachelor": "upn veteran east java"
+        }
+    },
+    {
+        "id": 3,
+        "name": "dhiyaul faruq",
+        "nickname": "faruq",
+        "class": "FSW-1",
+        "address": {
+            "province": "jawa timur",
+            "city": "jember"
+        },
+        "education": {
+            "bachelor": "universitas jember"
+        }
+    },
+    {
+        "id": 4,
+        "name": "arswendo erza",
+        "nickname": "erza",
+        "class": "FSW-1",
+        "address": {
+            "province": "lampung",
+            "city": "lampung"
+        },
+        "education": {
+            "bachelor": "universitas lampung"
+        }
+    },
+    {
+        "id": 5,
+        "name": "fariq",
+        "nickname": "fariq",
+        "class": "FSW-1",
+        "address": {
+            "province": "jawa timur",
+            "city": "jember"
+        },
+        "education": {
+            "bachelor": "universitas jember"
+        }
+    }
+]

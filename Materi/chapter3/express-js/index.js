@@ -4,9 +4,12 @@ const students = require('./data/students.json'); //import students data
 const app = express(); //create express app
 const port = 3000; //set port
 
+// Add middleware to parse JSON request bodies
+app.use(express.json());
+
 //create route for home page
 app.get('/', (req, res) => {
-    res.send('Hello World, this is my first express js');
+    res.send('ping successfully');
 });
 
 //create route for students page
@@ -31,6 +34,78 @@ app.get('/students/:id', (req, res) => {
     res.status(404).json({
         message: 'Student not found'
     });
+});
+
+app.post('/students', (req, res) => {
+    const { name, nickname, kelas, address, education } = req.body;
+    if(!name || name == ""){
+        res.status(400).json({
+            message: 'Name is required'
+        });
+        return;
+    }
+    if(!nickname || nickname == ""){
+        res.status(400).json({
+            message: 'Nickname is required'
+        });
+        return;
+    }
+    if(!kelas || kelas == ""){
+        res.status(400).json({
+            message: 'Kelas is required'
+        });
+        return;
+    }
+    if(!address){
+        res.status(400).json({
+            message: 'Address is required'
+        });
+        return;
+    }
+    if(!education){
+        res.status(400).json({
+            message: 'Education is required'
+        });
+        return;
+    }
+    
+    const { province, city } = address;
+    if (!province ) {
+        res.status(400).json({
+            message: 'Province is required'
+        });
+        return;
+    }
+    if (!city ) {
+        res.status(400).json({
+            message: 'City is required'
+        });
+        return;
+    }
+    const { bachelor } = education;
+    if (!bachelor ) {
+        res.status(400).json({
+            message: 'Bachelor is required'
+        });
+        return;
+    }
+
+    const newStudent = {
+        id: students.length + 1,
+        name,
+        nickname,
+        kelas,
+        address : {
+            province,
+            city
+        },  
+        education : {
+            bachelor
+        }
+    };
+
+    students.push(newStudent);
+    res.status(201).json(newStudent);
 });
 
 // Run the express server

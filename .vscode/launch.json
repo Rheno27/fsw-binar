@@ -8,11 +8,10 @@
             "type": "node",
             "request": "launch",
             "name": "Chapter 3 - Express JS",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/Materi/chapter3/express-js/index.js",
-            "cwd": "${workspaceFolder}/Materi/chapter3/express-js"
+            "skipFiles": ["<node_internals>/**"],
+            "cwd": "${workspaceFolder}/Materi/chapter3/express-js",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"]
         }
     ]
 }

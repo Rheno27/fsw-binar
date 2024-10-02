@@ -63,18 +63,5 @@
     "education": {
       "bachelor": "universitas jember"
     }
-  },
-  {
-    "id": 6,
-    "name": "tes 6",
-    "nickname": "tes 6",
-    "kelas": "FSW-1",
-    "address": {
-      "province": "jawa timur",
-      "city": "jember"
-    },
-    "education": {
-      "bachelor": "universitas jember"
-    }
   }
 ]

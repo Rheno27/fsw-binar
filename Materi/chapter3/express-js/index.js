@@ -1,5 +1,7 @@
 const express = require('express'); //import express
-const students = require('./data/students.json'); //import students data
+const fs = require('fs'); // sebagai modul untuk mengakses file system
+const path = require('path'); // sebagai modul untuk menangani path file
+let students = require('./data/students.json'); //import students data
 
 const app = express(); //create express app
 const port = 3000; //set port
@@ -105,7 +107,17 @@ app.post('/students', (req, res) => {
     };
 
     students.push(newStudent);
-    res.status(201).json(newStudent);
+
+    //membuat file students.json dengan data yang diperbarui
+    const filePath = path.join(__dirname, 'data', 'students.json');//menggunakan path untuk menentukan lokasi file
+    fs.writeFile(filePath, JSON.stringify(students, null, 2), (err) => { //menulis file students.json dengan data yang diperbarui
+        if (err) {
+            console.error('Error writing file:', err);
+            res.status(500).json({ message: 'Error saving student data' });
+        } else {
+            res.status(201).json(newStudent);
+        }
+    });
 });
 
 // Run the express server

@@ -63,7 +63,7 @@ app.post('/students', (req, res) => {
             id: students.length + 1,
             ...validatedData
         };
-        
+
         const maxId = students.reduce((max, student) => Math.max(max, student.id), 0);
         newStudent.id = maxId + 1;
 
@@ -71,13 +71,13 @@ app.post('/students', (req, res) => {
 
         // Tulis kembali file students.json dengan data yang diperbarui
         const filePath = path.join(__dirname, 'data', 'students.json');
-        fs.writeFile(filePath, JSON.stringify(students, null, 2), (err) => {
+        fs.writeFileSync(filePath, JSON.stringify(students, null, 2), (err) => {
             if (err) {
                 console.error('Error writing file:', err);
                 return res.status(500).json({ message: 'Error saving student data' });
             }
-            res.status(201).json(newStudent);
         });
+        res.status(201).json(newStudent);
     } catch (error) { //berfungsi untuk menangkap error yang terjadi
         if (error instanceof z.ZodError) {
             // Jika ada error validasi, kirim pesan error
@@ -138,24 +138,24 @@ app.put('/students/:id', (req, res) => {
 //     res.status(200).json({ message: 'Student deleted successfully' });
 // });
 
-//delet student by id use filter
+//delete student mengguanak splice dan fs
 app.delete('/students/:id', (req, res) => {
     const { id } = req.params;
-    const student = students.find((student) => student.id == id);
-    if (!student) {
+    const studentIndex = students.findIndex((student) => student.id == id);
+    if (studentIndex === -1) {
         return res.status(404).json({ message: 'Student not found' });
     }
-    const filePath = path.join(__dirname, 'data', 'students.json'); //berfungsi untuk mengambil path dari file students.json
-    const newStudents = students.filter((student) => student.id != id); //berfungsi untuk menghapus data siswa berdasarkan id
-    fs.writeFile(filePath, JSON.stringify(newStudents, null, 2), (err) => { //berfungsi untuk menulis data siswa ke file students.json
+    students.splice(studentIndex, 1);
+
+    const filePath = path.join(__dirname, 'data', 'students.json');
+    fs.writeFileSync(filePath, JSON.stringify(students, null, 2), (err) => {
         if (err) {
-            console.error('Error writing file:', err); //berfungsi untuk menampilkan pesan error jika terjadi error saat menulis file
+            console.error('Error writing file:', err);
             return res.status(500).json({ message: 'Error saving student data' });
         }
-        res.status(200).json({ message: 'Student deleted successfully' });
     });
+    res.status(200).json({ message: 'Student deleted successfully' });
 });
-
 // Run the express server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

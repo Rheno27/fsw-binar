@@ -26,8 +26,8 @@
     }
   },
   {
-    "id": 5,
-    "name": "julius",
+    "id": 4,
+    "name": "tess",
     "nickname": "lius",
     "kelas": "FSW-1",
     "address": {
@@ -40,7 +40,7 @@
   },
   {
     "id": 6,
-    "name": "tess",
+    "name": "tess maxid",
     "nickname": "lius",
     "kelas": "FSW-1",
     "address": {
@@ -53,7 +53,7 @@
   },
   {
     "id": 7,
-    "name": "tess",
+    "name": "tess maxid lg",
     "nickname": "lius",
     "kelas": "FSW-1",
     "address": {

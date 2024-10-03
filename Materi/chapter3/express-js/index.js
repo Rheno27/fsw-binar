@@ -63,6 +63,9 @@ app.post('/students', (req, res) => {
             id: students.length + 1,
             ...validatedData
         };
+        
+        const maxId = students.reduce((max, student) => Math.max(max, student.id), 0);
+        newStudent.id = maxId + 1;
 
         students.push(newStudent);
 
@@ -75,12 +78,12 @@ app.post('/students', (req, res) => {
             }
             res.status(201).json(newStudent);
         });
-    } catch (error) {
+    } catch (error) { //berfungsi untuk menangkap error yang terjadi
         if (error instanceof z.ZodError) {
             // Jika ada error validasi, kirim pesan error
             return res.status(400).json({ 
                 message: 'Validation failed', 
-                errors: error.errors.map(e => ({ field: e.path.join('.'), message: e.message }))
+                errors: error.errors.map(e => ({ field: e.path.join('.'), message: e.message })) 
             });
         }
         // Untuk error lainnya
@@ -124,17 +127,29 @@ app.put('/students/:id', (req, res) => {
     }
 });
 
+//delet srudent by id use splice
+// app.delete('/students/:id', (req, res) => {
+//     const { id } = req.params;
+//     const studentIndex = students.findIndex((student) => student.id == id);
+//     if (studentIndex === -1) {
+//         return res.status(404).json({ message: 'Student not found' });
+//     }
+//     students.splice(studentIndex, 1);
+//     res.status(200).json({ message: 'Student deleted successfully' });
+// });
+
+//delet student by id use filter
 app.delete('/students/:id', (req, res) => {
     const { id } = req.params;
     const student = students.find((student) => student.id == id);
     if (!student) {
         return res.status(404).json({ message: 'Student not found' });
     }
-    const filePath = path.join(__dirname, 'data', 'students.json');
-    const newStudents = students.filter((student) => student.id != id);
-    fs.writeFile(filePath, JSON.stringify(newStudents, null, 2), (err) => {
+    const filePath = path.join(__dirname, 'data', 'students.json'); //berfungsi untuk mengambil path dari file students.json
+    const newStudents = students.filter((student) => student.id != id); //berfungsi untuk menghapus data siswa berdasarkan id
+    fs.writeFile(filePath, JSON.stringify(newStudents, null, 2), (err) => { //berfungsi untuk menulis data siswa ke file students.json
         if (err) {
-            console.error('Error writing file:', err);
+            console.error('Error writing file:', err); //berfungsi untuk menampilkan pesan error jika terjadi error saat menulis file
             return res.status(500).json({ message: 'Error saving student data' });
         }
         res.status(200).json({ message: 'Student deleted successfully' });

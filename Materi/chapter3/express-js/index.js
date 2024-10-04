@@ -1,4 +1,5 @@
 const express = require('express'); //import express
+require("express-async-errors");
 const fs = require('fs'); // sebagai modul untuk mengakses file system
 const path = require('path'); // sebagai modul untuk menangani path file
 const { z } = require('zod'); // Import Zod
@@ -7,6 +8,23 @@ let students = require('./data/students.json'); //import students data
 
 const app = express(); //create express app
 const port = 3000; //set port
+
+//standarize response
+const successResponse = (res, data) => {
+    res.status(200).json({
+        success: true,
+        data,
+    });
+};
+
+class BadRequestError extends Error {
+    constructor(errors) {
+        super("Validation failed");
+        this.errors = errors;
+        this.status = 400;
+    }
+}
+
 
 // Definisikan schema Zod untuk validasi input
 const studentSchema = z.object({
@@ -31,8 +49,27 @@ app.get('/', (req, res) => {
 });
 
 //create route for students page
-app.get('/students', (req, res) => {
-    res.json(students);
+app.get('/students', (req, res, next) => {
+    
+        const validateQuery = z.object({
+            name: z.string().optional(),
+        nickname: z.string().optional(),
+    });
+
+
+    const resultvalidateQuery = validateQuery.safeParse(req.query);
+    if (!resultvalidateQuery.success) {
+        throw new BadRequestError(resultvalidateQuery.error.errors.map);
+    }
+    
+    //search student by name and nickname
+    const { name, nickname } = req.query;
+    const searchedStudents = students.filter((student) => {
+        return student.name.toLowerCase().includes(name.toLowerCase()) &&
+                student.nickname.toLowerCase().includes(nickname.toLowerCase());
+    });
+
+    successResponse(res, searchedStudents);
 });
 
 //create route for students page with id
@@ -44,61 +81,42 @@ app.get('/students/:id', (req, res) => {
     const student = students.find((student) => student.id == id);
     //if student has been found, it will be response the student data
     if (student) {
-        res.json(student);
+        successResponse(res, student);
         return; 
     }
 
     //if student not found, it will be response with status 404
-    res.status(404).json({
-        message: 'Student not found'
-    });
+    throw new BadRequestError();
 });
 
 app.post('/students', (req, res) => {
-    try {
-        // Validasi input menggunakan Zod
-        const validatedData = studentSchema.parse(req.body);
+    
+    // Validasi input menggunakan Zod
+    const validatedData = studentSchema.parse(req.body);
 
-        const newStudent = {
+    const maxId = students.reduce((max, student) => Math.max(max, student.id), 0);
+    newStudent.id = maxId + 1;
+        
+    const newStudent = {
             id: students.length + 1,
             ...validatedData
         };
-
-        const maxId = students.reduce((max, student) => Math.max(max, student.id), 0);
-        newStudent.id = maxId + 1;
 
         students.push(newStudent);
 
         // Tulis kembali file students.json dengan data yang diperbarui
         const filePath = path.join(__dirname, 'data', 'students.json');
-        fs.writeFileSync(filePath, JSON.stringify(students, null, 2), (err) => {
-            if (err) {
-                console.error('Error writing file:', err);
-                return res.status(500).json({ message: 'Error saving student data' });
-            }
-        });
-        res.status(201).json(newStudent);
-    } catch (error) { //berfungsi untuk menangkap error yang terjadi
-        if (error instanceof z.ZodError) {
-            // Jika ada error validasi, kirim pesan error
-            return res.status(400).json({ 
-                message: 'Validation failed', 
-                errors: error.errors.map(e => ({ field: e.path.join('.'), message: e.message })) 
-            });
-        }
-        // Untuk error lainnya
-        res.status(500).json({ message: 'Internal server error' });
-    }
+        fs.writeFileSync(filePath, JSON.stringify(students, null, 2),);
+    successResponse(res, newStudent);
 });
 
 app.put('/students/:id', (req, res) => {
     const { id } = req.params;
     const student = students.find((student) => student.id == id);
     if (!student) {
-        return res.status(404).json({ message: 'Student not found' });
+        throw new BadRequestError();
     }
 
-    try {
         // Validasi input menggunakan Zod
         const validatedData = studentSchema.parse(req.body);
 
@@ -106,55 +124,42 @@ app.put('/students/:id', (req, res) => {
         Object.assign(student, validatedData);
 
         // Tulis kembali file students.json
-        const filePath = path.join(__dirname, 'data', 'students.json');
-        fs.writeFile(filePath, JSON.stringify(students, null, 2), (err) => {
-            if (err) {
-                console.error('Error writing file:', err);
-                return res.status(500).json({ message: 'Error saving student data' });
-            }
-            res.status(200).json(student);
-        });
-    } catch (error) {
-        if (error instanceof z.ZodError) {
-            // Jika ada error validasi, kirim pesan error
-            return res.status(400).json({ 
-                message: 'Validation failed', 
-                errors: error.errors.map(e => ({ field: e.path.join('.'), message: e.message }))
-            });
-        }
-        // Untuk error lainnya
-        res.status(500).json({ message: 'Internal server error' });
-    }
+    const filePath = path.join(__dirname, 'data', 'students.json');
+    fs.writeFileSync(filePath, JSON.stringify(students, null, 2));
+    successResponse(res, student);
 });
-
-//delet srudent by id use splice
-// app.delete('/students/:id', (req, res) => {
-//     const { id } = req.params;
-//     const studentIndex = students.findIndex((student) => student.id == id);
-//     if (studentIndex === -1) {
-//         return res.status(404).json({ message: 'Student not found' });
-//     }
-//     students.splice(studentIndex, 1);
-//     res.status(200).json({ message: 'Student deleted successfully' });
-// });
 
 //delete student mengguanak splice dan fs
 app.delete('/students/:id', (req, res) => {
     const { id } = req.params;
     const studentIndex = students.findIndex((student) => student.id == id);
     if (studentIndex === -1) {
-        return res.status(404).json({ message: 'Student not found' });
+        throw new BadRequestError();
     }
+    
     students.splice(studentIndex, 1);
 
     const filePath = path.join(__dirname, 'data', 'students.json');
-    fs.writeFileSync(filePath, JSON.stringify(students, null, 2), (err) => {
-        if (err) {
-            console.error('Error writing file:', err);
-            return res.status(500).json({ message: 'Error saving student data' });
-        }
+    fs.writeFileSync(filePath, JSON.stringify(students, null, 2));
+    successResponse(res, { message: 'Student deleted successfully' });
+});
+
+//function untuk menangkap error
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const errors = err.errors || [];
+    
+    let massage = err.message;
+    if (status === 500) {
+        massage = 'Internal Server Error';
+    }
+
+    res.status(status).json({
+        success: false,
+        data: null,
+        massage,
+        errors,
     });
-    res.status(200).json({ message: 'Student deleted successfully' });
 });
 // Run the express server
 app.listen(port, () => {

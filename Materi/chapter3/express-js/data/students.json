@@ -53,34 +53,8 @@
   },
   {
     "id": 7,
-    "name": "tess maxid lg",
-    "nickname": "lius",
-    "kelas": "FSW-1",
-    "address": {
-      "province": "jawa tengah",
-      "city": "jember"
-    },
-    "education": {
-      "bachelor": "universitas jember"
-    }
-  },
-  {
-    "id": 8,
-    "name": "rheno julius",
-    "nickname": "lius",
-    "kelas": "FSW-1",
-    "address": {
-      "province": "jawa tengah",
-      "city": "jember"
-    },
-    "education": {
-      "bachelor": "universitas jember"
-    }
-  },
-  {
-    "id": 9,
-    "name": "Fahmi alfareza",
-    "nickname": "reza",
+    "name": "tes lg",
+    "nickname": "lg",
     "kelas": "FSW-1",
     "address": {
       "province": "jawa tengah",

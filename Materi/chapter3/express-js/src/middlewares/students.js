@@ -30,27 +30,44 @@ exports.ValidateGetStudentById = (req, res, next) => {
 }
 
 exports.ValidateCreateStudent = (req, res, next) => {
+
     const validateBody = z.object({
         name: z.string(),
-        nickname: z.string().optional(),
-        kelas: z.string().optional(),
-        address: z.object({
-            province: z.string().optional(),
-            city: z.string().optional(),
-        }),
-        education: z.object({
-            bachelor: z.string().optional(),
-        }),
+        nickname: z.string(),
+        kelas: z.string(),
+        "address.province": z.string(),
+        "address.city": z.string(),
+        "education.bachelor": z.string().nullable().optional(),
     });
-    
-    const resultValidateBody = validateBody.safeParse(req.body);
-    if (!resultValidateBody.success) {
-        throw new BadRequestError(resultValidateBody.error.errors);
+
+    // The file is not required
+    const ValidateFileBody = z
+        .object({
+            profilePicture: z
+                .object({
+                    name: z.string(),
+                    data: z.any(),
+                })
+                .nullable()
+                .optional(),
+        })
+        .nullable()
+        .optional();
+
+    const result = validateBody.safeParse(req.body);
+    if (!result.success) {
+        throw new BadRequestError(result.error.errors);
+    }
+
+    const resultValidateFileBody = ValidateFileBody.safeParse(req.files);
+    if (!resultValidateFileBody.success) {
+        throw new BadRequestError(resultValidateFileBody.error.errors);
     }
 
     next();
-}
+};
 
+//delete student by id with file image
 exports.ValidateDeleteStudentById = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
@@ -60,27 +77,51 @@ exports.ValidateDeleteStudentById = (req, res, next) => {
     if (!resultValidateParams.success) {
         throw new BadRequestError(resultValidateParams.error.errors);
     }
+    
 
     next();
 }
 
 exports.ValidateUpdateStudentById = (req, res, next) => {
+    const validateParams = z.object({
+        id: z.string(),
+    });
+
+    const resultValidateParams = validateParams.safeParse(req.params);
+    if (!resultValidateParams.success) {
+        throw new BadRequestError(resultValidateParams.error.errors);
+    }
+
     const validateBody = z.object({
         name: z.string().optional(),
         nickname: z.string().optional(),
         kelas: z.string().optional(),
-        address: z.object({
-            province: z.string().optional(),
-            city: z.string().optional(),
-        }),
-        education: z.object({
-            bachelor: z.string().optional(),
-        }),
+        "address.province": z.string().optional(),
+        "address.city": z.string().optional(),
+        "education.bachelor": z.string().nullable().optional(),
     });
+
+    const ValidateFileBody = z
+        .object({
+            profilePicture: z
+                .object({
+                    name: z.string(),
+                    data: z.any(),
+                })
+                .nullable()
+                .optional(),
+        })
+        .nullable()
+        .optional();
 
     const resultValidateBody = validateBody.safeParse(req.body);
     if (!resultValidateBody.success) {
         throw new BadRequestError(resultValidateBody.error.errors);
+    }
+
+    const resultValidateFileBody = ValidateFileBody.safeParse(req.files);
+    if (!resultValidateFileBody.success) {
+        throw new BadRequestError(resultValidateFileBody.error.errors);
     }
 
     next();

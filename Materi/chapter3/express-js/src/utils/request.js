@@ -7,17 +7,26 @@ class BadRequestError extends Error {
 }
 
 class NotFoundError extends Error {
-    constructor() {
+    constructor(message) {
         if (message) {
             super(message);
         } else {
             super("Not found");
         }
         this.status = 404;
+    }   
+}
+
+class InternalServerError extends Error {
+    constructor(errors) {
+        super("Internal Server Error");
+        this.status = 500;
+        this.errors = errors;
     }
 }
 
 module.exports = {
     BadRequestError,
-    NotFoundError
+    NotFoundError,
+    InternalServerError
 }

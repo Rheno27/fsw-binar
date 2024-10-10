@@ -1,5 +1,6 @@
 const express = require("express");
 
+
 const { 
     ValidateGetStudents,
     ValidateGetStudentById,
@@ -18,11 +19,16 @@ const {
 
 const router = express.Router();
 
-router.get("/", ValidateGetStudents, GetStudents);
-router.get("/:id", ValidateGetStudentById, GetStudentById);
-router.post("/", ValidateCreateStudent, CreateStudent);
-router.delete("/:id", ValidateDeleteStudentById, DeleteStudentById);
-router.put("/:id", ValidateUpdateStudentById, UpdateStudentById);
+router
+    .route("/")
+    .get(ValidateGetStudents, GetStudents)
+    .post(ValidateCreateStudent, CreateStudent);
+
+router
+    .route("/:id")
+    .get(ValidateGetStudentById, GetStudentById)
+    .delete(ValidateDeleteStudentById, DeleteStudentById)
+    .put(ValidateUpdateStudentById, UpdateStudentById); 
 
 module.exports = router;
 

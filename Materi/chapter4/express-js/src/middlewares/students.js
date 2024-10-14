@@ -33,11 +33,9 @@ exports.ValidateCreateStudent = (req, res, next) => {
 
     const validateBody = z.object({
         name: z.string(),
-        nickname: z.string(),
-        kelas: z.string(),
-        "address.province": z.string(),
-        "address.city": z.string(),
-        "education.bachelor": z.string().nullable().optional(),
+        nickName: z.string(),
+        classes: z.string(),
+        universities: z.string(),
     });
 
     // The file is not required

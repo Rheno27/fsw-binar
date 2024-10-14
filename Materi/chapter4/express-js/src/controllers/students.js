@@ -1,42 +1,28 @@
 const studentService = require("../services/students");
 const { SuccessResponse } = require("../utils/response");
 
-exports.GetStudents = (req, res, next) => {
-    const dataStudents = studentService.GetStudents(
+exports.GetStudents = async (req, res, next) => {
+    // Call the usecase or service
+    const data = await studentService.GetStudents(
         req.query?.name,
-        req.query?.nickname
+        req.query?.nickName
     );
+    SuccessResponse(res, data);
+};
 
-    SuccessResponse(res, dataStudents);
 
-}
-
-exports.GetStudentById = (req, res, next) => {
+exports.GetStudentById = async (req, res, next) => {
     const {id} = req.params;
-    const dataStudent = studentService.GetStudentById(id);
+    const dataStudent = await studentService.GetStudentById(id);
     SuccessResponse(res, dataStudent);
 }
 
+//create student menggunakan prisma
 exports.CreateStudent = async (req, res, next) => {
-    // Convert to student data format
-    const requestBody = {
-        ...req.body,
-        address: {
-            province: req.body["address.province"],
-            city: req.body["address.city"],
-        },
-        education: {
-            bachelor: req.body["education.bachelor"],
-        }
-    }
-    delete requestBody["address.province"];
-    delete requestBody["address.city"];
-    delete requestBody["education.bachelor"];
-
     // Create the new student
-    const dataStudent = await studentService.CreateStudent(requestBody, req.files);
-    SuccessResponse(res, dataStudent);
-}
+    const data = await studentService.CreateStudent(req.body, req.files);
+    SuccessResponse(res, data);
+};
 
 
 exports.UpdateStudentById = async (req, res, next) => {

@@ -19,7 +19,7 @@
             "request": "launch",
             "name": "Chapter 4 - Express JS",
             "skipFiles": ["<node_internals>/**"],
-            "cwd": "${workspaceFolder}/Materi/chapter3/express-js",
+            "cwd": "${workspaceFolder}/Materi/chapter4/express-js",
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run", "dev"]
         }

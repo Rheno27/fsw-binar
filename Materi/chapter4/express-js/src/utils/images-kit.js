@@ -16,9 +16,7 @@ exports.imageUpload = async (file) => {
     return uploadFile?.url; 
 };
 
-
-
-// Add this function after the imageUpload function
+// image delete function
 // exports.imageDelete = async (fileId) => {
 //     try {
 //         await imagekit.deleteFile(fileId);
@@ -26,3 +24,4 @@ exports.imageUpload = async (file) => {
 //         console.error("Error deleting image from ImageKit:", error);
 //     }
 // };
+

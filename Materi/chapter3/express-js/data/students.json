@@ -42,17 +42,15 @@
   },
   {
     "id": 5,
-    "name": "tes put image",
+    "name": "tes p",
     "nickname": "tes",
     "kelas": "tes kel",
-    "address": {
-      "province": "tes provi",
-      "city": "tes city"
-    },
-    "education": {
-      "bachelor": "tes edu"
-    },
-    "profilePicture": "https://ik.imagekit.io/disjvxoiv/Screenshot_2024-05-22_152430_54fCvyzw1.png"
+    "address": {},
+    "education": {},
+    "profilePicture": "https://ik.imagekit.io/disjvxoiv/Screenshot_2024-05-22_152430_54fCvyzw1.png",
+    "nick_name": "tes",
+    "class_id": "1",
+    "university_id": "1"
   },
   {
     "id": 6,

@@ -20,30 +20,16 @@ exports.GetStudentById = async (req, res, next) => {
 //create student menggunakan prisma
 exports.CreateStudent = async (req, res, next) => {
     // Create the new student
-    const data = await studentService.CreateStudent(req.body, req.files);
-    SuccessResponse(res, data);
+    const dataStudent = await studentService.CreateStudent(req.body, req.files);
+    SuccessResponse(res, dataStudent);
 };
 
-
+// update student by id menggunakan prisma  
 exports.UpdateStudentById = async (req, res, next) => {
     const {id} = req.params;
-    const requestBody = {
-        ...req.body,
-        address: {
-            province: req.body["address.province"],
-            city: req.body["address.city"],
-        },
-        education: {
-            bachelor: req.body["education.bachelor"],
-        }
-    };
-    delete requestBody["address.province"];
-    delete requestBody["address.city"];
-    delete requestBody["education.bachelor"];
-    
-    const dataStudent = await studentService.UpdateStudentById(id, requestBody, req.files);
+    const dataStudent = await studentService.UpdateStudentById(id, req.body, req.files);
     SuccessResponse(res, dataStudent);
-}
+    }
 
 
 exports.DeleteStudentById = async (req, res, next) => {

@@ -2,7 +2,7 @@ const studentRepository = require("../repositories/students");
 const { NotFoundError } = require("../utils/request");
 const { imageUpload, imageDelete } = require("../utils/images-kit");
 
-exports.GetStudents = (name, nickname) => {
+exports.GetStudents = async (name, nickname) => {
     return studentRepository.GetStudents(name, nickname);
 };
 

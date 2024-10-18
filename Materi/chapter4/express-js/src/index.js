@@ -7,7 +7,7 @@ const { errorHandler, notFoundURLHandler } = require("./middlewares/errors");
 
 
 const app = express(); //create express app
-const port = 3000; //set port
+const port = process.env.PORT || 3000; //set port
 
 // Add middleware to parse JSON request bodies
 app.use(express.json());

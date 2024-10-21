@@ -1,0 +1,71 @@
+[
+  {
+    "id": 1,
+    "name": "rheno julius",
+    "nickname": "rheno",
+    "kelas": "FSW-1",
+    "address": {
+      "province": "jawa timur",
+      "city": "jember"
+    },
+    "education": {
+      "bachelor": "universitas jember"
+    }
+  },
+  {
+    "id": 2,
+    "name": "",
+    "nickname": "gambar",
+    "kelas": "1",
+    "address": {
+      "province": "jatim",
+      "city": "jemeber"
+    },
+    "education": {
+      "bachelor": "unej"
+    },
+    "profilePicture": "https://ik.imagekit.io/disjvxoiv/marker_mlsVRgBDMm.jpg"
+  },
+  {
+    "id": 3,
+    "name": "",
+    "nickname": "gambar",
+    "kelas": "1",
+    "address": {
+      "province": "jatim",
+      "city": "jemeber"
+    },
+    "education": {
+      "bachelor": "unej"
+    },
+    "profilePicture": "https://ik.imagekit.io/disjvxoiv/marker_RsxJew1FR.jpg"
+  },
+  {
+    "id": 5,
+    "name": "tes put image",
+    "nickname": "tes",
+    "kelas": "tes kel",
+    "address": {
+      "province": "tes provi",
+      "city": "tes city"
+    },
+    "education": {
+      "bachelor": "tes edu"
+    },
+    "profilePicture": "https://ik.imagekit.io/disjvxoiv/Screenshot_2024-05-22_152430_54fCvyzw1.png"
+  },
+  {
+    "id": 6,
+    "name": "",
+    "nickname": "gambar",
+    "kelas": "1",
+    "address": {
+      "province": "jatim",
+      "city": "jemeber"
+    },
+    "education": {
+      "bachelor": "unej"
+    },
+    "profilePicture": "https://ik.imagekit.io/disjvxoiv/marker_PzeNiBq-L.jpg"
+  }
+]

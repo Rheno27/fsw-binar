@@ -1,5 +1,5 @@
 const express = require("express");
-
+const {authorization} = require("../middlewares/auth");
 
 const { 
     ValidateGetStudents,
@@ -21,14 +21,14 @@ const router = express.Router();
 
 router
     .route("/")
-    .get(ValidateGetStudents, GetStudents)
-    .post(ValidateCreateStudent, CreateStudent);
+    .get(authorization(1, 2), ValidateGetStudents, GetStudents)
+    .post(authorization(1), ValidateCreateStudent, CreateStudent);
 
 router
     .route("/:id")
-    .get(ValidateGetStudentById, GetStudentById)
-    .delete(ValidateDeleteStudentById, DeleteStudentById)
-    .put(ValidateUpdateStudentById, UpdateStudentById); 
+    .get(authorization(1, 2), ValidateGetStudentById, GetStudentById)
+    .delete(authorization(1), ValidateDeleteStudentById, DeleteStudentById)
+    .put(authorization(1), ValidateUpdateStudentById, UpdateStudentById); 
 
 module.exports = router;
 

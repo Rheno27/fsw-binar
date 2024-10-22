@@ -16,26 +16,23 @@ exports.CreateUser = async (dataUser) => {
     return JSONBigInt.parse(serializedUsers);
 }
 
-exports.GetUserByEmail = async (email, password) => {
-    let query = {};
+exports.GetUserByEmail = async (email) => {
+    const query = {
+        where: {
+            email: email,
+        },
+    };
+    const searchedUser = await prisma.users.findFirst(query);
+    const serializedUsers = JSONBigInt.stringify(searchedUser);
+    return JSONBigInt.parse(serializedUsers);
+}
 
-    let orQuery = [];
-    if (email) {
-        orQuery.push({
-            email: {contains: email, mode: "insensitive"},
-        });
-    }
-    if (password) {
-        orQuery.push({
-            password: {contains: password, mode: "insensitive"},
-        });
-    }
-    if (orQuery.length > 0) {
-        query.where = {
-            ...query.where,
-            OR: orQuery,
-        };
-    }
+exports.GetUserById = async (id) => {
+    const query = {
+        where: {
+            id: id,
+        },
+    };
     const searchedUser = await prisma.users.findFirst(query);
     const serializedUsers = JSONBigInt.stringify(searchedUser);
     return JSONBigInt.parse(serializedUsers);

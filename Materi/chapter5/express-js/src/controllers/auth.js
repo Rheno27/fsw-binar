@@ -7,6 +7,12 @@ exports.Register = async (req, res, next) => {
 }
 
 exports.Login = async (req, res, next) => {
-    const dataUser = await authService.Login(req.body);
-    SuccessResponse(res, dataUser);
-}
+    const data = await authService.Login(req.body.email, req.body.password);
+    SuccessResponse(res, data);
+};
+
+exports.GetProfile = async (req, res, next) => {
+    const user = req.user;
+    delete user.password;
+    SuccessResponse(res, user);
+};

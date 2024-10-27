@@ -1,5 +1,6 @@
 const repoCars = require('../repositories/carsRepositories');
 const { imageUpload } = require('../utils/images-kit.js');
+const { NotFoundError } = require('../utils/request.js');
 
 
 exports.getAllCars = async (plate, rentPerDay, capacity, description, availableAt, available, year, image) => {

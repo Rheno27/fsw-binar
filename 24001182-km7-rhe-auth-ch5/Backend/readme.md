@@ -1,6 +1,6 @@
 # Car Listing API Ch5
 
-- **Admin**: admin123
+- **Admin**: admin123@gmail.com
 - **Password**: admin123
 
 ## Project Links

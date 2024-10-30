@@ -1,5 +1,6 @@
 const express = require("express");
 const {authorization} = require("../middlewares/auth");
+const { adminRole, userRole } = require("../constants/auth");
 
 const { 
     ValidateGetStudents,
@@ -21,14 +22,14 @@ const router = express.Router();
 
 router
     .route("/")
-    .get(authorization(1, 2), ValidateGetStudents, GetStudents)
-    .post(authorization(1), ValidateCreateStudent, CreateStudent);
+    .get(authorization(adminRole, userRole), ValidateGetStudents, GetStudents)
+    .post(authorization(adminRole), ValidateCreateStudent, CreateStudent);
 
 router
     .route("/:id")
-    .get(authorization(1, 2), ValidateGetStudentById, GetStudentById)
-    .delete(authorization(1), ValidateDeleteStudentById, DeleteStudentById)
-    .put(authorization(1), ValidateUpdateStudentById, UpdateStudentById); 
+    .get(authorization(adminRole, userRole), ValidateGetStudentById, GetStudentById)
+    .delete(authorization(adminRole), ValidateDeleteStudentById, DeleteStudentById)
+    .put(authorization(adminRole), ValidateUpdateStudentById, UpdateStudentById); 
 
 module.exports = router;
 

@@ -14,6 +14,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  
+
   const onSubmit = async (event) => {
     event.preventDefault();
     
@@ -22,7 +24,8 @@ function Login() {
       password,
     };
 
-    const response = await fetch("http://localhost:3000/auth/login", {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/auth/login`, {
       body: JSON.stringify(body),
       method: "POST",
       headers: {
@@ -32,6 +35,7 @@ function Login() {
     const result = await response.json();
     if (result.success) {
       localStorage.setItem("token", result.data.token);
+      window.location = "/";
       return;
     }
     alert(result.message);

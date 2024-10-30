@@ -18,28 +18,29 @@ function Register() {
     const [profilePicture, setProfilePicture] = useState('')
 
     const onSubmit = async (event) => {
-    event.preventDefault()
+        event.preventDefault()
 
-    if (password != confirmPassword) {
-        alert('Password and password confirmation must be same!')
-    }
+        if (password != confirmPassword) {
+            alert('Password and password confirmation must be same!')
+        }
 
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('email', email)
-    formData.append('password', password)
-    formData.append('profile_picture', profilePicture)
+        const formData = new FormData()
+        formData.append('name', name)
+        formData.append('email', email)
+        formData.append('password', password)
+        formData.append('profile_picture', profilePicture)
 
-    await fetch('http://localhost:3000/auth/register', {
-        body: formData,
-        method: 'POST',
-    })
+        const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/auth/register`, {
+            body: formData,
+            method: 'POST',
+        })
 
-    const result = await response.json()
-    if (result.success) {
-        localStorage.setItem('token', result.data.token)
-        return
-    }
+        const result = await response.json()
+        if (result.success) {
+            localStorage.setItem('token', result.data.token)
+            return
+        }
 
         alert(result.message)
     } 

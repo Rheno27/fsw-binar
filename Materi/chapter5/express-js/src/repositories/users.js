@@ -17,23 +17,21 @@ exports.CreateUser = async (dataUser) => {
 }
 
 exports.GetUserByEmail = async (email) => {
-    const query = {
+    const user = await prisma.users.findFirst({
         where: {
-            email: email,
+            email,
         },
-    };
-    const searchedUser = await prisma.users.findFirst(query);
-    const serializedUsers = JSONBigInt.stringify(searchedUser);
+    });
+    const serializedUsers = JSONBigInt.stringify(user);
     return JSONBigInt.parse(serializedUsers);
 }
 
 exports.GetUserById = async (id) => {
-    const query = {
+    const user = await prisma.users.findFirst({
         where: {
-            id: id,
+            id,
         },
-    };
-    const searchedUser = await prisma.users.findFirst(query);
-    const serializedUsers = JSONBigInt.stringify(searchedUser);
+    });
+    const serializedUsers = JSONBigInt.stringify(user);
     return JSONBigInt.parse(serializedUsers);
 }

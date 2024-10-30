@@ -2,9 +2,9 @@ const authService = require("../services/auth");
 const {SuccessResponse} = require("../utils/response");
 
 exports.Register = async (req, res, next) => {
-    const dataUser = await authService.Register(req.body, req.files);
-    SuccessResponse(res, dataUser);
-}
+    const data = await authService.Register(req.body, req.files);
+    SuccessResponse(res, data);
+};
 
 exports.Login = async (req, res, next) => {
     const data = await authService.Login(req.body.email, req.body.password);
@@ -12,7 +12,10 @@ exports.Login = async (req, res, next) => {
 };
 
 exports.GetProfile = async (req, res, next) => {
-    const user = req.user;
-    delete user.password;
-    SuccessResponse(res, user);
+    const data = req.user;
+
+    // remove the password object
+    delete data.password;
+
+    SuccessResponse(res, data);
 };

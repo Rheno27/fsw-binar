@@ -7,33 +7,39 @@ const {
 const jwt = require("jsonwebtoken");
 const userRepository = require("../repositories/users");
 
-exports.authorization = (...roles) => async (req, res, next) => {
-    const authorizationHandler = req.headers["authorization"];
+exports.authorization =
+    (...roles) =>
+    async (req, res, next) => {
+        // get token from request headers
+        const authorizationHeader = req.headers["authorization"];
+        if (!authorizationHeader) {
+            throw new Unauthorized("You need to login in advance!");
+        }
 
-    if (!authorizationHandler) {
-        throw new UnauthorizedError("Unauthorized");
-    }
+        const splittedAuthHeader = authorizationHeader.split(" ");
+        if (splittedAuthHeader.length <= 1) {
+            throw new Unauthorized("Token is not valid!");
+        }
 
-    const splitAuthorization = authorizationHandler.split(" ");
-    if (splitAuthorization.length <= 1) {
-        throw new UnauthorizedError("Token not valid!");
-    }
-    const token = splitAuthorization[1];
+        const token = splittedAuthHeader[1];
 
-    const extractedToken = jwt.verify(token, process.env.JWT_SECRET);
+        // extract the token
+        const extractedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    //get info user
-    const user = await userRepository.GetUserById(extractedToken.user_id);
+        // get information of the user that has that token
+        const user = await userRepository.GetUserById(extractedToken.user_id);
 
-    const accessValidation = roles.includes(user.role_id);
-    if (!accessValidation) {
-        throw new ForbiddenError("You can't access this resource!");
-    }
+        // validate the role that can be access to the next middleware
+        const accessValidation = roles.includes(user.role_id);
+        if (!accessValidation) {
+            throw new Forbidden("You can not access this resource!");
+        }
 
-    req.user = user;
-    
-    next();
-}
+        // pass the user to request, then every middleware can access the user profile without needing to get again in repository level
+        req.user = user;
+
+        next();
+    };
 
 
 exports.validateRegister =  (req, res, next) => {

@@ -1,39 +1,52 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
-import { useEffect, useState } from "react";
 import Image from "react-bootstrap/Image";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser, setToken } from "../../redux/slices/auth";
 
 const NavigationBar = () => {
-    const [user, setUser] = useState(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const { user, token } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const getProfile = async (token) => {
+            // ambil data user dari API
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/profile`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                method: "GET"
+            })
+
+            //get data dari response
+            const result = await response.json();
+            if (result.success) {
+                dispatch(setUser(result.data));
+                return;
+            }
+            
+            // jika gagal, maka hapus data user dan token
+            dispatch(setUser(null));
+            dispatch(setToken(null));
+            // redirect ke halaman login
+            navigate({ to: "/login" });
+        }
         if (token) {
+            // jika ada token, maka ambil data user
             getProfile(token);
         }
-    }, [])
-
-    const getProfile = async (token) => {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/profile`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            method: "GET"
-        })
-        const result = await response.json();
-        if (result.success) {
-            setUser(result.data);
-            return;
-        }
-        alert(result.message)
-    }
+    }, [token, navigate, dispatch])
 
     const logout = (event) => {
         event.preventDefault();
-        localStorage.removeItem("token");
-        window.location = "/login";
+        dispatch(setUser(null));
+        dispatch(setToken(null));
+        navigate({ to: "/login" });
     }
     return (
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">

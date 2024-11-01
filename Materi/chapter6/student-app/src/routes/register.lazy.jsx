@@ -1,5 +1,5 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
+import { useState, useEffect } from 'react'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -11,11 +11,22 @@ export const Route = createLazyFileRoute('/register')({
 })
 
 function Register() {
+    const navigate = useNavigate(); 
+
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [profilePicture, setProfilePicture] = useState('')
+
+
+    useEffect(() => {
+        // jika ada token, maka redirect ke halaman home
+        const token = localStorage.getItem("token");
+        if (token) {
+            navigate({ to: "/" });
+        }
+    }, [navigate])
 
     const onSubmit = async (event) => {
         event.preventDefault()
@@ -37,8 +48,9 @@ function Register() {
         })
 
         const result = await response.json()
+        // jika berhasil, maka redirect ke halaman login
         if (result.success) {
-            localStorage.setItem('token', result.data.token)
+            navigate({ to: "/login" });
             return
         }
 

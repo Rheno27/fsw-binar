@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useDispatch } from "react-redux";
 import { setToken } from "../redux/slices/auth";
+import { login } from "../services/auth";
 
 export const Route = createLazyFileRoute("/login")({
   component: Login,
@@ -35,16 +36,7 @@ function Login() {
       password,
     };
 
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/auth/login`, {
-        body: JSON.stringify(body),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const result = await response.json();
+    const result = await login(body);
     if (result.success) {
       dispatch(setToken(result.data.token));
       navigate({ to: "/" });

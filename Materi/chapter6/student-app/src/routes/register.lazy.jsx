@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
+import { register } from '../services/auth'
 
 export const Route = createLazyFileRoute('/register')({
     component: Register,
@@ -35,19 +36,14 @@ function Register() {
             alert('Password and password confirmation must be same!')
         }
 
-        const formData = new FormData()
-        formData.append('name', name)
-        formData.append('email', email)
-        formData.append('password', password)
-        formData.append('profile_picture', profilePicture)
+        const request = {
+            name,
+            email,
+            password,
+            profilePicture,
+        }
 
-        const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/auth/register`, {
-            body: formData,
-            method: 'POST',
-        })
-
-        const result = await response.json()
+        const result = await register(request);
         // jika berhasil, maka redirect ke halaman login
         if (result.success) {
             navigate({ to: "/login" });

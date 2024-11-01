@@ -6,6 +6,7 @@ import Image from "react-bootstrap/Image";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser, setToken } from "../../redux/slices/auth";
+import { profile } from "../../services/auth";
 
 const NavigationBar = () => {
     const dispatch = useDispatch();
@@ -15,16 +16,7 @@ const NavigationBar = () => {
 
     useEffect(() => {
         const getProfile = async (token) => {
-            // ambil data user dari API
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/profile`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                method: "GET"
-            })
-
-            //get data dari response
-            const result = await response.json();
+            const result = await profile(token);
             if (result.success) {
                 dispatch(setUser(result.data));
                 return;

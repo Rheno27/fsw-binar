@@ -3,8 +3,10 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import { Link } from "@tanstack/react-router";
+import { useSelector } from "react-redux";
 
 const StudentItem = ({ student }) => {
+    const { user } = useSelector((state) => state.auth);
     return (
         <Col md={3}>
             <Card style={{ width: "18rem" }}>
@@ -12,6 +14,7 @@ const StudentItem = ({ student }) => {
                 <Card.Body>
                     <Card.Title>{student?.name}</Card.Title>
                     <Card.Text>{student?.nick_name}</Card.Text>
+                    <col />
                     <Button
                         as={Link}
                         href={`/students/${student?.id}`}

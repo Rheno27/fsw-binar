@@ -44,7 +44,11 @@ exports.GetStudentById = async (id) => {
     const student = await prisma.students.findUnique({
         where: {
             id: id
-        }
+        },
+        include: {
+            classes: true,
+            universities: true,
+        },
     });
     const serializedStudents = JSONBigInt.stringify(student);
     return JSONBigInt.parse(serializedStudents);

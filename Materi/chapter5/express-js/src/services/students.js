@@ -33,7 +33,7 @@ exports.DeleteStudentById = async (id) => {
 // update
 exports.UpdateStudentById = async (id, data, file) => {
     
-    const existingStudent = await studentRepository.GetStudentById(id);
+    const existingStudent = studentRepository.GetStudentById(id);
     if (!existingStudent) {
         throw new NotFoundError("Student is Not Found!");
     }

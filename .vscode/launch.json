@@ -40,6 +40,16 @@
             "cwd": "${workspaceFolder}/24001182-km7-rhe-auth-ch5/Backend",
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run", "dev"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Chapter 6 - React JS",
+            "skipFiles": ["<node_internals>/**"],
+            "cwd": "${workspaceFolder}/Materi/chapter6/student-app",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"]
         }
+
     ]
 }

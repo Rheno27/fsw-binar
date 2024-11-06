@@ -13,12 +13,12 @@ exports.authorization =
         // get token from request headers
         const authorizationHeader = req.headers["authorization"];
         if (!authorizationHeader) {
-            throw new Unauthorized("You need to login in advance!");
+            throw new UnauthorizedError("You need to login in advance!");
         }
 
         const splittedAuthHeader = authorizationHeader.split(" ");
         if (splittedAuthHeader.length <= 1) {
-            throw new Unauthorized("Token is not valid!");
+            throw new UnauthorizedError("Token is not valid!");
         }
 
         const token = splittedAuthHeader[1];
@@ -32,7 +32,7 @@ exports.authorization =
         // validate the role that can be access to the next middleware
         const accessValidation = roles.includes(user.role_id);
         if (!accessValidation) {
-            throw new Forbidden("You can not access this resource!");
+            throw new ForbiddenError("You can not access this resource!");
         }
 
         // pass the user to request, then every middleware can access the user profile without needing to get again in repository level

@@ -1,12 +1,13 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import { deleteStudent, getDetailStudent } from "../../services/students";
 import Button from "react-bootstrap/Button";
+import { deleteStudent, getDetailStudent } from "../../services/students";
+import { toast } from "react-toastify";
+import { confirmAlert } from "react-confirm-alert";
 import { useSelector } from "react-redux";
-import { useNavigate, Link } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/students/$id")({
     component: StudentDetail,
@@ -15,7 +16,9 @@ export const Route = createLazyFileRoute("/students/$id")({
 function StudentDetail() {
     const navigate = useNavigate();
     const { id } = Route.useParams();
+
     const { user } = useSelector((state) => state.auth);
+
     const [student, setStudent] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isNotFound, setIsNotFound] = useState(false);
@@ -60,14 +63,28 @@ function StudentDetail() {
 
     const onDelete = async (event) => {
         event.preventDefault();
-        if (confirm("Are you sure want to delete this student?")) {
-            const result = await deleteStudent(id);
-            if (result?.success) {
-                navigate({ to: "/" });
-                return;
-            }
-            alert(result?.message);
-        }
+        confirmAlert({
+            title: "Confirm to delete",
+            message: "Are you sure to delete this data?",
+            buttons: [
+                {
+                    label: "Yes",
+                    onClick: async () => {
+                        const result = await deleteStudent(id);
+                        if (result?.success) {
+                            navigate({ to: "/" });
+                            return;
+                        }
+
+                        toast.error(result?.message);
+                    },
+                },
+                {
+                    label: "No",
+                    onClick: () => {},
+                },
+            ],
+        });
     }
 
     return (
@@ -91,10 +108,31 @@ function StudentDetail() {
                         <Card.Text>{student?.universities?.name}</Card.Text>
                     </Card.Body>
                     {user && user?.role_id === 1 && (
-                        <Card.Footer>
-                            <Button as={Link} to={`/students/edit/${student?.id}`} variant="primary">Edit</Button>
-                            <Button onClick={onDelete} variant="danger">Delete</Button>
-                        </Card.Footer>
+                        <>
+                            <Card.Text>
+                                <div className="d-grid gap-2">
+                                    <Button
+                                        as={Link}
+                                        href={`/students/edit/${id}`}
+                                        variant="primary"
+                                        size="md"
+                                    >
+                                        Edit Student
+                                    </Button>
+                                </div>
+                            </Card.Text>
+                            <Card.Text>
+                                <div className="d-grid gap-2">
+                                    <Button
+                                        onClick={onDelete}
+                                        variant="danger"
+                                        size="md"
+                                    >
+                                    Delete Student
+                                    </Button>
+                                </div>
+                            </Card.Text>
+                        </>
                     )}
                 </Card>
             </Col>

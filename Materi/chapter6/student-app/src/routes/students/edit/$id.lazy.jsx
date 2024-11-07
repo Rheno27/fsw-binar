@@ -9,15 +9,20 @@ import Image from "react-bootstrap/Image";
 import { getUniversities } from "../../../services/universities";
 import { getClasses } from "../../../services/class";
 import { getDetailStudent, updateStudent } from "../../../services/students";
+import { toast } from "react-toastify";
+import Protected from "../../../components/Auth/Protected";
 
 export const Route = createLazyFileRoute('/students/edit/$id')({
-    component: EditStudent,
+    component: () => (
+        <Protected role={[1]}>
+            <EditStudent />
+        </Protected>
+    ),
 })
 
 function EditStudent() {
-    const { id } = Route.useParams();
-    const [student, setStudent] = useState(null);
     const navigate = useNavigate();
+    const { id } = Route.useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [isNotFound, setIsNotFound] = useState(false);
     const [name, setName] = useState("");
@@ -28,6 +33,24 @@ function EditStudent() {
     const [universityId, setUniversityId] = useState(0);
     const [classes, setClasses] = useState([]);
     const [classId, setClassId] = useState(0);
+
+    useEffect(() => {
+        const getUniversitiesData = async () => {
+            const result = await getUniversities();
+            if (result?.success) {
+                setUniversities(result?.data);
+            }
+        };
+        const getClassesData = async () => {
+            const result = await getClasses();
+            if (result?.success) {
+                setClasses(result?.data);
+            }
+        };
+        
+        getUniversitiesData();
+        getClassesData();
+    }, []);
 
     useEffect(() => {
         const getDetailStudentData = async (id) => {
@@ -48,24 +71,15 @@ function EditStudent() {
             }
             setIsLoading(false);
         };
-        
-        const getUniversitiesData = async () => {
-            const result = await getUniversities();
-            if (result?.success) {
-                setUniversities(result?.data);
-            }
-        };
-        const getClassesData = async () => {
-            const result = await getClasses();
-            if (result?.success) {
-                setClasses(result?.data);
-            }
-        };
-        
+
         getDetailStudentData(id);
-        getUniversitiesData();
-        getClassesData();
     }, [id]);
+
+    if (isNotFound) {
+        navigate({ to: "/" });
+        return;
+    }
+
     
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -82,7 +96,7 @@ function EditStudent() {
             navigate({ to: "/students/$id" });
             return;
         }
-        alert(result?.message);
+        toast.error(result?.message);
     };
     
     return (

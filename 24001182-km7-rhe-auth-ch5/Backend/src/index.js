@@ -1,14 +1,16 @@
 //src/utils/index.js
 require("dotenv").config();
-
 const express = require("express"); //import express
 require("express-async-errors");
 const router = require("./routes");
 const fileUpload = require("express-fileupload");
+const cors = require("cors");
 const { errorHandler, notFoundURLHandler } = require("./middlewares/errors");
 
 const app = express(); //create express app
-const port = 3000; //set port
+const port = process.env.port || 3000; //set port
+
+app.use(cors());
 
 // Add middleware to parse JSON request bodies
 app.use(express.json());

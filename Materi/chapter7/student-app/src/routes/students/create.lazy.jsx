@@ -5,25 +5,23 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { getUniversities } from "../../../services/universities";
-import { getClasses } from "../../../services/class";
-import { getDetailStudent, updateStudent } from "../../../services/students";
+import Image from "react-bootstrap/Image";
+import { getUniversities } from "../../services/universities";
+import { getClasses } from "../../services/class";
+import { createStudent } from "../../services/students";
 import { toast } from "react-toastify";
-import Protected from "../../../components/Auth/Protected";
+import Protected from "../../components/Auth/Protected";
 
-export const Route = createLazyFileRoute('/students/edit/$id')({
+export const Route = createLazyFileRoute("/students/create")({
     component: () => (
         <Protected role={[1]}>
-            <EditStudent />
+            <CreateStudent />
         </Protected>
     ),
-})
+});
 
-function EditStudent() {
+function CreateStudent() {
     const navigate = useNavigate();
-    const { id } = Route.useParams();
-    const [isLoading, setIsLoading] = useState(false);
-    const [isNotFound, setIsNotFound] = useState(false);
     const [name, setName] = useState("");
     const [nickName, setNickName] = useState("");
     const [profilePicture, setProfilePicture] = useState(undefined);
@@ -46,40 +44,11 @@ function EditStudent() {
                 setClasses(result?.data);
             }
         };
-        
+
         getUniversitiesData();
         getClassesData();
     }, []);
 
-    useEffect(() => {
-        const getDetailStudentData = async (id) => {
-            setIsLoading(true);
-            
-            const result = await getDetailStudent(id);
-            if (result?.success) {
-                setName(result.data.name);
-                setNickName(result.data.nick_name);
-                setUniversityId(result.data.university_id);
-                setClassId(result.data.class_id);
-                // setProfilePicture(result.data.profile_picture);
-                setCurrentProfilePicture(result.data.profile_picture);
-                setIsNotFound(false);
-            } else {
-                setIsNotFound(true);
-                navigate({ to: "/" });
-            }
-            setIsLoading(false);
-        };
-
-        getDetailStudentData(id);
-    }, [id]);
-
-    if (isNotFound) {
-        navigate({ to: "/" });
-        return;
-    }
-
-    
     const onSubmit = async (event) => {
         event.preventDefault();
         const request = {
@@ -90,62 +59,80 @@ function EditStudent() {
             profilePicture,
         };
         
-        const result = await updateStudent(id, request);
+        const result = await createStudent(request);
         if (result?.success) {
-            navigate({ to: "/students/$id" });
+            navigate({ to: "/" });
             return;
         }
         toast.error(result?.message);
     };
-    
+
     return (
         <Row className="mt-5">
             <Col className="offset-md-3">
                 <Card>
                     <Card.Header className="text-center">
-                        Edit Student
+                        Create Student
                     </Card.Header>
                     <Card.Body>
                         <Form onSubmit={onSubmit}>
-                            <Form.Group as={Row} className="mb-3" controlId="name">
-                                <Form.Label column sm={3}>Name</Form.Label>
+                            <Form.Group
+                                as={Row}
+                                className="mb-3"
+                                controlId="name"
+                            >
+                                <Form.Label column sm={3}>
+                                    Name
+                                </Form.Label>
                                 <Col sm="9">
                                     <Form.Control
                                         type="text"
                                         placeholder="Name"
                                         required
-                                        value={name} // Ubah ke state name
+                                        value={name}
                                         onChange={(event) => {
                                             setName(event.target.value);
                                         }}
                                     />
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="nick_name">
-                                <Form.Label column sm={3}>Nick Name</Form.Label>
+                            <Form.Group
+                                as={Row}
+                                className="mb-3"
+                                controlId="nickName"
+                            >
+                                <Form.Label column sm={3}>
+                                    Nick Name
+                                </Form.Label>
                                 <Col sm="9">
                                     <Form.Control
                                         type="text"
                                         placeholder="Nick Name"
                                         required
-                                        value={nickName} // Ubah ke state nickName
+                                        value={nickName}
                                         onChange={(event) => {
                                             setNickName(event.target.value);
                                         }}
                                     />
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="university">
-                                <Form.Label column sm={3}>University</Form.Label>
+                            <Form.Group
+                                as={Row}
+                                className="mb-3"
+                                controlId="university"
+                            >
+                                <Form.Label column sm={3}>
+                                    University
+                                </Form.Label>
                                 <Col sm="9">
                                     <Form.Select
                                         aria-label="Default select example"
-                                        value={universityId} // Ubah ke state universityId
-                                        onChange={(event) => {
-                                            setUniversityId(event.target.value);
-                                        }}
+                                        onChange={(event) => setUniversityId(event.target.value)}
+                                        required
                                     >
-                                        <option disabled>Select University</option>
+                                        <option disabled selected>
+                                            Select University
+                                        </option>
                                         {universities.length > 0 &&
                                             universities.map((university) => (
                                                 <option
@@ -158,54 +145,71 @@ function EditStudent() {
                                     </Form.Select>
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="class">
-                                <Form.Label column sm={3}>Class</Form.Label>
+                            <Form.Group
+                                as={Row}
+                                className="mb-3"
+                                controlId="class"
+                            >
+                                <Form.Label column sm={3}>
+                                    Class
+                                </Form.Label>
                                 <Col sm="9">
                                     <Form.Select
                                         aria-label="Default select example"
-                                        value={classId} // Ubah ke state classId
-                                        onChange={(event) => {
-                                            setClassId(event.target.value);
-                                        }}
+                                        onChange={(event) => setClassId(event.target.value)}
+                                        required
                                     >
-                                        <option disabled>Select Class</option>
+                                        <option disabled selected>
+                                            Select Class
+                                        </option>
                                         {classes.length > 0 &&
                                             classes.map((c) => (
-                                                <option key={c?.id} value={c?.id}>
+                                                <option
+                                                    key={c?.id}
+                                                    value={c?.id}
+                                                >
                                                     {c?.class}
                                                 </option>
                                             ))}
                                     </Form.Select>
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="profilePicture">
-                                <Form.Label column sm={3}>Profile Picture</Form.Label>
+                            <Form.Group
+                                as={Row}
+                                className="mb-3"
+                                controlId="profilePicture"
+                            >
+                                <Form.Label column sm={3}>
+                                    Profile Picture
+                                </Form.Label>
                                 <Col sm={9}>
-                                    <img
-                                        src={currentProfilePicture}
-                                        alt="profile"
-                                        style={{
-                                            width: "100px",
-                                            height: "100px",    
-                                            display: "block",
-                                            margin: "auto",
-                                        }}
-                                    />
                                     <Form.Control
                                         type="file"
                                         placeholder="Choose File"
+                                        required
                                         onChange={(event) => {
                                             setProfilePicture(
-                                                event.target.files[0]);
+                                                event.target.files[0]
+                                            );
                                             setCurrentProfilePicture(URL.createObjectURL(event.target.files[0]));
                                         }}
                                         accept=".jpg,.png"
                                     />
                                 </Col>
                             </Form.Group>
+                            <Form.Group
+                                as={Row}
+                                className="mb-3"
+                                controlId="profilePicture"
+                            >
+                                <Form.Label column sm={3}></Form.Label>
+                                <Col sm={9}>
+                                    <Image src={currentProfilePicture} fluid />
+                                </Col>
+                            </Form.Group>
                             <div className="d-grid gap-2">
                                 <Button type="submit" variant="primary">
-                                    Update Student
+                                    Create Student
                                 </Button>
                             </div>
                         </Form>
@@ -215,5 +219,4 @@ function EditStudent() {
             <Col md={3}></Col>
         </Row>
     );
-    }
-    
+}

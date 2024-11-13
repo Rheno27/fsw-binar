@@ -247,7 +247,8 @@ exports.updateCar = async (id, carBody) => {
     });
 
     const createNewOptions = await Promise.all(
-        (Array.isArray(carBody.option_id) ? carBody.option_id : [carBody.option_id])
+        (Array.isArray(carBody.option_id) 
+        ? carBody.option_id : [carBody.option_id])
             .map(async (optionId) => {
                 return prisma.options.create({
                     data: {

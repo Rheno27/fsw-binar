@@ -1,4 +1,4 @@
-const {z} = require('zod');
+const {z, optional} = require('zod');
 const { badrequestError, BadRequestError } = require('../utils/request');
 
 exports.validateGetCars = (req, res, next) => {
@@ -87,8 +87,13 @@ exports.validateUpdateCar = (req, res, next) => {
         image: z.object({
             data: z.any(),
             name: z.string(),
-        }),
-    });
+        })
+        .nullable()
+        .optional(),
+    })
+    .nullable()
+    .optional()
+    ;
 
     const resultValidate = validateBody.safeParse(req.body);
     if (!resultValidate.success) {
